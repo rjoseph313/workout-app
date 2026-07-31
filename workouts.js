@@ -32,24 +32,95 @@ function clearForm() {
   exerciseUnitSelect.value = 'lbs';
 }
 
+function groupByExercise(workouts) {
+  const groups = new Map();
+  for (const workout of workouts) {
+    if (!groups.has(workout.exercise_name)) {
+      groups.set(workout.exercise_name, []);
+    }
+    groups.get(workout.exercise_name).push(workout);
+  }
+  return groups;
+}
+
+async function getTips(exerciseName, entries, button, tipEl) {
+  const originalLabel = button.textContent;
+  button.disabled = true;
+  button.textContent = 'Thinking…';
+  tipEl.classList.add('hidden');
+  tipEl.textContent = '';
+
+  try {
+    const res = await fetch('/api/get-tips', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        exercise_name: exerciseName,
+        entries: entries.slice(0, 5).map((entry) => ({
+          sets: entry.sets,
+          reps: entry.reps,
+          weight: entry.weight,
+          weight_unit: entry.weight_unit,
+          created_at: entry.created_at,
+        })),
+      }),
+    });
+
+    const data = await res.json();
+    tipEl.textContent = res.ok ? data.tip : data.error || 'Could not get tips right now.';
+  } catch (err) {
+    tipEl.textContent = 'Could not reach the tips service.';
+  }
+
+  tipEl.classList.remove('hidden');
+  button.disabled = false;
+  button.textContent = originalLabel;
+}
+
 function renderWorkouts(workouts) {
   workoutList.innerHTML = '';
-  for (const workout of workouts) {
-    const li = document.createElement('li');
-    li.className = 'workout-item';
 
-    const name = document.createElement('span');
-    name.className = 'workout-item-name';
-    name.textContent = workout.exercise_name;
+  for (const [exerciseName, entries] of groupByExercise(workouts)) {
+    const group = document.createElement('li');
+    group.className = 'exercise-group';
 
-    const meta = document.createElement('span');
-    meta.className = 'workout-item-meta';
-    meta.textContent = workout.weight
-      ? `${workout.sets}x${workout.reps} @ ${workout.weight}${workout.weight_unit || 'lbs'}`
-      : `${workout.sets}x${workout.reps}`;
+    const header = document.createElement('div');
+    header.className = 'exercise-group-header';
 
-    li.append(name, meta);
-    workoutList.append(li);
+    const name = document.createElement('h3');
+    name.className = 'exercise-group-name';
+    name.textContent = exerciseName;
+
+    const tipsBtn = document.createElement('button');
+    tipsBtn.type = 'button';
+    tipsBtn.className = 'get-tips-btn';
+    tipsBtn.textContent = 'Get Tips';
+
+    header.append(name, tipsBtn);
+
+    const sublist = document.createElement('ul');
+    sublist.className = 'workout-sublist';
+    for (const entry of entries) {
+      const li = document.createElement('li');
+      li.className = 'workout-item';
+
+      const meta = document.createElement('span');
+      meta.className = 'workout-item-meta';
+      meta.textContent = entry.weight
+        ? `${entry.sets}x${entry.reps} @ ${entry.weight}${entry.weight_unit || 'lbs'}`
+        : `${entry.sets}x${entry.reps}`;
+
+      li.append(meta);
+      sublist.append(li);
+    }
+
+    const tipText = document.createElement('p');
+    tipText.className = 'tip-text hidden';
+
+    tipsBtn.addEventListener('click', () => getTips(exerciseName, entries, tipsBtn, tipText));
+
+    group.append(header, sublist, tipText);
+    workoutList.append(group);
   }
 }
 
