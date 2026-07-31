@@ -4,7 +4,7 @@
 // bundle shipped to the client and never appears in the browser's network tab.
 
 const GEMINI_URL =
-  'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent';
+  'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent';
 
 module.exports = async function handler(req, res) {
   if (req.method !== 'POST') {
