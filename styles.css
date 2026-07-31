@@ -1,0 +1,253 @@
+:root {
+  --bg: #f3f4f6;
+  --surface: #ffffff;
+  --surface-hover: #f9fafb;
+  --text: #111827;
+  --text-secondary: #6b7280;
+  --border: #e5e7eb;
+  --border-strong: #d1d5db;
+  --primary: #4f46e5;
+  --primary-hover: #4338ca;
+  --danger: #ef4444;
+  --danger-hover: #dc2626;
+  --success: #10b981;
+  --shadow: rgba(17, 24, 39, 0.06);
+  --shadow-strong: rgba(17, 24, 39, 0.1);
+  --radius: 14px;
+  --radius-sm: 10px;
+}
+
+[data-theme='dark'] {
+  --bg: #111318;
+  --surface: #1a1d24;
+  --surface-hover: #21252d;
+  --text: #f3f4f6;
+  --text-secondary: #9ca3af;
+  --border: #2b2f38;
+  --border-strong: #3a3f4a;
+  --primary: #818cf8;
+  --primary-hover: #a5b4fc;
+  --danger: #f87171;
+  --danger-hover: #fca5a5;
+  --success: #34d399;
+  --shadow: rgba(0, 0, 0, 0.35);
+  --shadow-strong: rgba(0, 0, 0, 0.5);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: var(--bg);
+  color: var(--text);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  transition: background-color 0.25s ease, color 0.25s ease;
+}
+
+.app {
+  max-width: 480px;
+  margin: 0 auto;
+  padding: 2.5rem 1.5rem 4rem;
+}
+
+.app-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 2rem;
+}
+
+.app-header h1 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin: 0;
+  letter-spacing: -0.01em;
+}
+
+.theme-toggle {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text);
+  font-size: 1.1rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.2s ease, border-color 0.2s ease, transform 0.15s ease;
+}
+
+.theme-toggle:hover {
+  background: var(--surface-hover);
+  transform: rotate(-8deg);
+}
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: 0 1px 3px var(--shadow);
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+  transition: background-color 0.25s ease, border-color 0.25s ease;
+}
+
+#auth-status {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  margin: 0 0 1rem;
+}
+
+.field-row {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+input[type='email'],
+input[type='password'],
+input[type='text'],
+input[type='number'],
+select {
+  width: 100%;
+  padding: 0.7rem 0.85rem;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-strong);
+  background: var(--bg);
+  color: var(--text);
+  font-size: 0.95rem;
+  outline: none;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+input[type='email']:focus,
+input[type='password']:focus,
+input[type='text']:focus,
+input[type='number']:focus,
+select:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--primary) 20%, transparent);
+}
+
+.btn-row {
+  display: flex;
+  gap: 0.6rem;
+  margin-top: 0.85rem;
+}
+
+button {
+  font-family: inherit;
+  font-size: 0.9rem;
+  font-weight: 600;
+  border-radius: var(--radius-sm);
+  border: 1px solid transparent;
+  padding: 0.6rem 1rem;
+  cursor: pointer;
+  transition: background-color 0.2s ease, border-color 0.2s ease, transform 0.1s ease;
+}
+
+button:active {
+  transform: scale(0.97);
+}
+
+#login-btn {
+  background: var(--primary);
+  color: #fff;
+}
+
+#login-btn:hover {
+  background: var(--primary-hover);
+}
+
+#signup-btn {
+  background: transparent;
+  color: var(--text);
+  border-color: var(--border-strong);
+}
+
+#signup-btn:hover {
+  background: var(--surface-hover);
+}
+
+#logout-btn {
+  background: transparent;
+  color: var(--text-secondary);
+  border-color: var(--border-strong);
+}
+
+#logout-btn:hover {
+  background: var(--surface-hover);
+  color: var(--text);
+}
+
+.error-text {
+  color: var(--danger);
+  font-size: 0.85rem;
+  margin: 0.6rem 0 0;
+  min-height: 1em;
+}
+
+.hidden {
+  display: none;
+}
+
+#workouts-section h2 {
+  font-size: 1.05rem;
+  margin: 0 0 1rem;
+}
+
+.workout-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  margin-bottom: 1.25rem;
+}
+
+.workout-form-row {
+  display: flex;
+  gap: 0.6rem;
+}
+
+.workout-form-row input,
+.workout-form-row select {
+  flex: 1;
+  min-width: 0;
+}
+
+#workout-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.workout-item {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.75rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 0.8rem 0.9rem;
+  box-shadow: 0 1px 2px var(--shadow);
+  transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+
+.workout-item-name {
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+
+.workout-item-meta {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  white-space: nowrap;
+}

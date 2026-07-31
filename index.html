@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Workout Log</title>
+  <link rel="stylesheet" href="styles.css" />
+  <script>
+    // Applied before first paint so there's no flash of the wrong theme.
+    // theme.js only wires up the toggle button afterward.
+    (function () {
+      const stored = localStorage.getItem('theme');
+      const theme = stored || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+      document.documentElement.setAttribute('data-theme', theme);
+    })();
+  </script>
+</head>
+<body>
+  <div class="app">
+    <div class="app-header">
+      <h1>Workout Log</h1>
+      <button type="button" id="theme-toggle" class="theme-toggle" aria-label="Toggle theme"></button>
+    </div>
+
+    <div class="card">
+      <p id="auth-status"></p>
+      <form id="auth-form">
+        <div class="field-row">
+          <input type="email" id="email" placeholder="Email" autocomplete="email" required />
+          <input type="password" id="password" placeholder="Password" autocomplete="current-password" required />
+        </div>
+        <div class="btn-row">
+          <button type="button" id="login-btn">Log In</button>
+          <button type="button" id="signup-btn">Sign Up</button>
+        </div>
+      </form>
+      <button type="button" id="logout-btn" style="display: none;">Log Out</button>
+      <p class="error-text" id="auth-error"></p>
+    </div>
+
+    <div class="card hidden" id="workouts-section">
+      <h2>Log a Workout</h2>
+      <div class="workout-form">
+        <input type="text" id="exercise-name" placeholder="Exercise name" />
+        <div class="workout-form-row">
+          <input type="number" id="exercise-sets" placeholder="Sets" min="1" />
+          <input type="number" id="exercise-reps" placeholder="Reps" min="1" />
+          <input type="number" id="exercise-weight" placeholder="Weight" min="0" step="0.5" />
+          <select id="exercise-unit">
+            <option value="lbs">lbs</option>
+            <option value="kg">kg</option>
+          </select>
+        </div>
+        <div class="btn-row">
+          <button type="button" id="add-workout-btn">Add Workout</button>
+        </div>
+        <p class="error-text" id="workout-error"></p>
+      </div>
+      <ul id="workout-list"></ul>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="supabaseClient.js"></script>
+  <script src="auth.js"></script>
+  <script src="workouts.js"></script>
+  <script src="theme.js"></script>
+</body>
+</html>
