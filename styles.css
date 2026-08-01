@@ -252,6 +252,14 @@ button:active {
   white-space: nowrap;
 }
 
+.exercise-group {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 0.9rem;
+  transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+
 .exercise-group-header {
   display: flex;
   align-items: center;
@@ -266,11 +274,17 @@ button:active {
   margin: 0;
 }
 
+.exercise-group-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
 .get-tips-btn {
   flex-shrink: 0;
   background: transparent;
   color: var(--primary);
-  border-color: var(--border-strong);
+  border-color: var(--primary);
   font-size: 0.8rem;
   padding: 0.4rem 0.75rem;
 }
@@ -282,6 +296,52 @@ button:active {
 .get-tips-btn:disabled {
   cursor: default;
   opacity: 0.6;
+}
+
+/* Blue only while the cursor is specifically over Get Tips — hovering the
+   rest of the box does not signal that action. */
+.exercise-group:has(.get-tips-btn:hover) {
+  background: color-mix(in srgb, var(--primary) 10%, var(--surface));
+  border-color: var(--primary);
+}
+
+.delete-exercise-btn {
+  flex-shrink: 0;
+  width: 26px;
+  height: 26px;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: none;
+  border-radius: 50%;
+  color: var(--danger);
+  font-size: 0.75rem;
+  line-height: 1;
+  opacity: 0;
+  transition: opacity 0.2s ease, background-color 0.2s ease;
+}
+
+.exercise-group:hover .delete-exercise-btn {
+  opacity: 1;
+}
+
+.delete-exercise-btn:hover {
+  background: color-mix(in srgb, var(--danger) 18%, transparent);
+}
+
+.delete-exercise-btn:disabled {
+  cursor: default;
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+/* Red only while the cursor is specifically over the delete button —
+   hovering the rest of the box does not signal a delete action. */
+.exercise-group:has(.delete-exercise-btn:hover) {
+  background: color-mix(in srgb, var(--danger) 10%, var(--surface));
+  border-color: var(--danger);
 }
 
 .workout-sublist {

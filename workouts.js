@@ -43,6 +43,31 @@ function groupByExercise(workouts) {
   return groups;
 }
 
+async function deleteExercise(exerciseName, button) {
+  const confirmed = window.confirm(
+    `Delete all logged sets for ${exerciseName}? This cannot be undone.`
+  );
+  if (!confirmed) {
+    return;
+  }
+
+  clearError();
+  button.disabled = true;
+
+  const { error } = await supabaseClient
+    .from('workouts')
+    .delete()
+    .eq('exercise_name', exerciseName);
+
+  if (error) {
+    showError(error.message);
+    button.disabled = false;
+    return;
+  }
+
+  loadWorkouts();
+}
+
 async function getTips(exerciseName, entries, button, tipEl) {
   const originalLabel = button.textContent;
   button.disabled = true;
@@ -91,12 +116,22 @@ function renderWorkouts(workouts) {
     name.className = 'exercise-group-name';
     name.textContent = exerciseName;
 
+    const actions = document.createElement('div');
+    actions.className = 'exercise-group-actions';
+
     const tipsBtn = document.createElement('button');
     tipsBtn.type = 'button';
     tipsBtn.className = 'get-tips-btn';
     tipsBtn.textContent = 'Get Tips';
 
-    header.append(name, tipsBtn);
+    const deleteBtn = document.createElement('button');
+    deleteBtn.type = 'button';
+    deleteBtn.className = 'delete-exercise-btn';
+    deleteBtn.textContent = '✕';
+    deleteBtn.setAttribute('aria-label', `Delete all logged sets for ${exerciseName}`);
+
+    actions.append(tipsBtn, deleteBtn);
+    header.append(name, actions);
 
     const sublist = document.createElement('ul');
     sublist.className = 'workout-sublist';
@@ -118,6 +153,7 @@ function renderWorkouts(workouts) {
     tipText.className = 'tip-text hidden';
 
     tipsBtn.addEventListener('click', () => getTips(exerciseName, entries, tipsBtn, tipText));
+    deleteBtn.addEventListener('click', () => deleteExercise(exerciseName, deleteBtn));
 
     group.append(header, sublist, tipText);
     workoutList.append(group);
