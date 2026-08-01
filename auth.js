@@ -7,7 +7,6 @@ const passwordInput = document.getElementById('password');
 const signUpBtn = document.getElementById('signup-btn');
 const logInBtn = document.getElementById('login-btn');
 const logOutBtn = document.getElementById('logout-btn');
-const statusEl = document.getElementById('auth-status');
 const errorEl = document.getElementById('auth-error');
 
 function showError(message) {
@@ -49,11 +48,9 @@ async function logOut() {
 
 function renderSession(session) {
   if (session) {
-    statusEl.textContent = `Logged in as ${session.user.email}`;
     authForm.style.display = 'none';
     logOutBtn.style.display = 'inline-block';
   } else {
-    statusEl.textContent = 'Not logged in';
     authForm.style.display = 'block';
     logOutBtn.style.display = 'none';
   }

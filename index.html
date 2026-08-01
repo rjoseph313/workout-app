@@ -16,14 +16,19 @@
   </script>
 </head>
 <body>
+  <div class="nav-trigger"></div>
+  <nav class="top-nav">
+    <button type="button" id="theme-toggle" class="theme-toggle" aria-label="Toggle theme"></button>
+    <div class="nav-spacer"></div>
+    <button type="button" id="logout-btn" style="display: none;">Log Out</button>
+  </nav>
+
   <div class="app">
     <div class="app-header">
       <h1>Workout Log</h1>
-      <button type="button" id="theme-toggle" class="theme-toggle" aria-label="Toggle theme"></button>
     </div>
 
-    <div class="card">
-      <p id="auth-status"></p>
+    <div class="auth-block">
       <form id="auth-form">
         <div class="field-row">
           <input type="email" id="email" placeholder="Email" autocomplete="email" required />
@@ -34,11 +39,10 @@
           <button type="button" id="signup-btn">Sign Up</button>
         </div>
       </form>
-      <button type="button" id="logout-btn" style="display: none;">Log Out</button>
       <p class="error-text" id="auth-error"></p>
     </div>
 
-    <div class="card hidden" id="workouts-section">
+    <div class="hidden" id="workout-form-card">
       <h2>Log a Workout</h2>
       <div class="workout-form">
         <input type="text" id="exercise-name" placeholder="Exercise name" />
@@ -56,8 +60,9 @@
         </div>
         <p class="error-text" id="workout-error"></p>
       </div>
-      <ul id="workout-list"></ul>
     </div>
+
+    <ul id="workout-list" class="hidden"></ul>
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>

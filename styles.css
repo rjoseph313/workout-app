@@ -1,37 +1,65 @@
 :root {
-  --bg: #f3f4f6;
+  --bg: #f6f7f9;
   --surface: #ffffff;
-  --surface-hover: #f9fafb;
-  --text: #111827;
-  --text-secondary: #6b7280;
-  --border: #e5e7eb;
-  --border-strong: #d1d5db;
-  --primary: #4f46e5;
-  --primary-hover: #4338ca;
+  --surface-hover: #eef1f5;
+  --text: #0d0f14;
+  --text-secondary: #5b6472;
+  --border: #e3e6ec;
+  --border-strong: #cbd1db;
+
+  /* Muted-neon accents for light mode: same hues as dark mode, darkened/desaturated
+     enough to hold contrast and read as "bold brand color" rather than glowing. */
+  --primary: #0072e0;
+  --primary-hover: #005bb3;
+  --on-primary: #ffffff;
+  --success: #0f9960;
+  --success-hover: #0c7d4d;
+  --on-success: #ffffff;
+
   --danger: #ef4444;
   --danger-hover: #dc2626;
-  --success: #10b981;
+
   --shadow: rgba(17, 24, 39, 0.06);
   --shadow-strong: rgba(17, 24, 39, 0.1);
+
+  /* No glow in light mode — a bright box-shadow/text-shadow halo doesn't read on
+     a white background, it just looks like a rendering bug. */
+  --glow-primary: none;
+  --glow-primary-strong: none;
+  --glow-success: none;
+
   --radius: 14px;
   --radius-sm: 10px;
 }
 
 [data-theme='dark'] {
-  --bg: #111318;
-  --surface: #1a1d24;
-  --surface-hover: #21252d;
-  --text: #f3f4f6;
-  --text-secondary: #9ca3af;
-  --border: #2b2f38;
-  --border-strong: #3a3f4a;
-  --primary: #818cf8;
-  --primary-hover: #a5b4fc;
+  --bg: #08090c;
+  --surface: #121319;
+  --surface-hover: #1a1c24;
+  --text: #f2f5f9;
+  --text-secondary: #8b93a5;
+  --border: #21232c;
+  --border-strong: #2f3340;
+
+  /* Full-intensity neon: bright cyan-blue primary, neon green secondary. Text
+     drawn on top of these (--on-primary/--on-success) has to go dark, not white,
+     since both accents are lighter than mid-gray. */
+  --primary: #00d4ff;
+  --primary-hover: #4de3ff;
+  --on-primary: #04141c;
+  --success: #39ff8f;
+  --success-hover: #7dffb3;
+  --on-success: #04241a;
+
   --danger: #f87171;
   --danger-hover: #fca5a5;
-  --success: #34d399;
-  --shadow: rgba(0, 0, 0, 0.35);
-  --shadow-strong: rgba(0, 0, 0, 0.5);
+
+  --shadow: rgba(0, 0, 0, 0.5);
+  --shadow-strong: rgba(0, 0, 0, 0.65);
+
+  --glow-primary: 0 0 10px rgba(0, 212, 255, 0.55), 0 0 26px rgba(0, 212, 255, 0.3);
+  --glow-primary-strong: 0 0 14px rgba(0, 212, 255, 0.75), 0 0 38px rgba(0, 212, 255, 0.4);
+  --glow-success: 0 0 10px rgba(57, 255, 143, 0.5), 0 0 24px rgba(57, 255, 143, 0.28);
 }
 
 * {
@@ -48,33 +76,84 @@ body {
 }
 
 .app {
-  max-width: 480px;
+  max-width: 900px;
   margin: 0 auto;
-  padding: 2.5rem 1.5rem 4rem;
+  padding: 4.5rem 1.5rem 4rem;
 }
 
 .app-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+  text-align: center;
   margin-bottom: 2rem;
 }
 
+/* Invisible hover zone pinned to the very top edge of the viewport — its only
+   job is to catch the initial hover and reveal .top-nav (see the sibling
+   selector below). Stays interactive even while the nav bar itself is hidden.
+   Height is roughly half of .app's top padding (the gap above the title),
+   so the reveal zone is easy to reach without stretching into the title. */
+.nav-trigger {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2.25rem;
+  z-index: 5;
+}
+
+.top-nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.85rem 1.5rem;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  transform: translateY(-100%);
+  opacity: 0;
+  pointer-events: none;
+  transition: transform 0.25s ease, opacity 0.2s ease;
+}
+
+/* Revealed by hovering the trigger strip, and kept open by hovering the bar
+   itself once it's visible (it now covers the trigger, so this second
+   condition is what stops it snapping shut under the cursor). */
+.nav-trigger:hover ~ .top-nav,
+.top-nav:hover {
+  transform: translateY(0);
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.nav-spacer {
+  flex: 1;
+}
+
 .app-header h1 {
-  font-size: 1.5rem;
-  font-weight: 700;
+  font-size: 2.25rem;
+  font-weight: 900;
+  text-transform: uppercase;
   margin: 0;
   letter-spacing: -0.01em;
+  text-shadow: var(--glow-primary);
 }
 
 .theme-toggle {
+  flex-shrink: 0;
   width: 40px;
   height: 40px;
+  padding: 0;
   border-radius: 50%;
   border: 1px solid var(--border);
   background: var(--surface);
   color: var(--text);
   font-size: 1.1rem;
+  font-weight: 400;
+  text-transform: none;
+  letter-spacing: normal;
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -84,23 +163,20 @@ body {
 
 .theme-toggle:hover {
   background: var(--surface-hover);
-  transform: rotate(-8deg);
+  transform: rotate(-12deg) scale(1.05);
 }
 
-.card {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  box-shadow: 0 1px 3px var(--shadow);
-  padding: 1.5rem;
-  margin-bottom: 1.5rem;
-  transition: background-color 0.25s ease, border-color 0.25s ease;
+/* No card chrome on either form — just a width cap so inputs don't stretch
+   to the full 900px app width, centered on the page via margin: auto. */
+.auth-block {
+  max-width: 320px;
+  margin: 0 auto 2rem;
 }
 
-#auth-status {
-  font-size: 0.9rem;
-  color: var(--text-secondary);
-  margin: 0 0 1rem;
+#workout-form-card {
+  max-width: 480px;
+  margin: 0 auto 2rem;
+  text-align: center;
 }
 
 .field-row {
@@ -142,42 +218,66 @@ select:focus {
 
 button {
   font-family: inherit;
-  font-size: 0.9rem;
-  font-weight: 600;
+  font-size: 0.85rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
   border-radius: var(--radius-sm);
   border: 1px solid transparent;
-  padding: 0.6rem 1rem;
+  padding: 0.75rem 1.25rem;
   cursor: pointer;
-  transition: background-color 0.2s ease, border-color 0.2s ease, transform 0.1s ease;
+  transition: background-color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease,
+    transform 0.15s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+button:hover {
+  transform: translateY(-2px);
 }
 
 button:active {
-  transform: scale(0.97);
+  transform: scale(0.94) translateY(0);
 }
 
-#login-btn {
+#login-btn,
+#add-workout-btn {
   background: var(--primary);
-  color: #fff;
+  color: var(--on-primary);
+  box-shadow: var(--glow-primary);
 }
 
-#login-btn:hover {
+#login-btn:hover,
+#add-workout-btn:hover {
   background: var(--primary-hover);
+  box-shadow: var(--glow-primary-strong);
+}
+
+#workout-form-card .btn-row {
+  justify-content: center;
+}
+
+#add-workout-btn {
+  font-size: 0.95rem;
+  padding: 1rem 2.5rem;
 }
 
 #signup-btn {
   background: transparent;
-  color: var(--text);
-  border-color: var(--border-strong);
+  color: var(--success);
+  border-color: var(--success);
 }
 
 #signup-btn:hover {
-  background: var(--surface-hover);
+  background: color-mix(in srgb, var(--success) 12%, transparent);
+  box-shadow: var(--glow-success);
 }
 
 #logout-btn {
+  flex-shrink: 0;
   background: transparent;
   color: var(--text-secondary);
   border-color: var(--border-strong);
+  font-size: 0.7rem;
+  padding: 0.5rem 0.85rem;
 }
 
 #logout-btn:hover {
@@ -196,9 +296,13 @@ button:active {
   display: none;
 }
 
-#workouts-section h2 {
-  font-size: 1.05rem;
+#workout-form-card h2 {
+  font-size: 1.1rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
   margin: 0 0 1rem;
+  text-shadow: var(--glow-primary);
 }
 
 .workout-form {
@@ -223,22 +327,20 @@ button:active {
   list-style: none;
   margin: 0;
   padding: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 0.6rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 1rem;
 }
 
 .workout-item {
   display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: 0.75rem;
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-sm);
-  padding: 0.8rem 0.9rem;
-  box-shadow: 0 1px 2px var(--shadow);
-  transition: background-color 0.2s ease, border-color 0.2s ease;
+  justify-content: center;
+  padding: 0.3rem 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.workout-item:last-child {
+  border-bottom: none;
 }
 
 .workout-item-name {
@@ -247,50 +349,71 @@ button:active {
 }
 
 .workout-item-meta {
-  font-size: 0.85rem;
+  font-size: 0.8rem;
   color: var(--text-secondary);
-  white-space: nowrap;
 }
 
 .exercise-group {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 0.6rem;
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: var(--radius-sm);
-  padding: 0.9rem;
+  padding: 1.1rem 1rem 1rem;
   transition: background-color 0.2s ease, border-color 0.2s ease;
 }
 
-.exercise-group-header {
+.exercise-group-title {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.exercise-group-icon {
+  flex-shrink: 0;
+  width: 40px;
+  height: 40px;
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: 0.6rem;
-  margin-bottom: 0.5rem;
+  justify-content: center;
+  border-radius: var(--radius-sm);
+  background: var(--bg);
+  border: 1px solid var(--border);
+  color: var(--primary);
+}
+
+.exercise-group-icon svg {
+  width: 22px;
+  height: 22px;
 }
 
 .exercise-group-name {
-  font-size: 0.95rem;
-  font-weight: 600;
+  font-size: 0.85rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
   margin: 0;
-}
-
-.exercise-group-actions {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
+  overflow-wrap: anywhere;
 }
 
 .get-tips-btn {
-  flex-shrink: 0;
+  align-self: stretch;
+  margin-top: auto;
   background: transparent;
-  color: var(--primary);
-  border-color: var(--primary);
-  font-size: 0.8rem;
-  padding: 0.4rem 0.75rem;
+  color: var(--success);
+  border-color: var(--success);
+  font-size: 0.7rem;
+  padding: 0.5rem 0.75rem;
 }
 
 .get-tips-btn:hover {
-  background: var(--surface-hover);
+  background: color-mix(in srgb, var(--success) 12%, transparent);
+  box-shadow: var(--glow-success);
 }
 
 .get-tips-btn:disabled {
@@ -298,17 +421,20 @@ button:active {
   opacity: 0.6;
 }
 
-/* Blue only while the cursor is specifically over Get Tips — hovering the
+/* Green only while the cursor is specifically over Get Tips — hovering the
    rest of the box does not signal that action. */
 .exercise-group:has(.get-tips-btn:hover) {
-  background: color-mix(in srgb, var(--primary) 10%, var(--surface));
-  border-color: var(--primary);
+  background: color-mix(in srgb, var(--success) 10%, var(--surface));
+  border-color: var(--success);
+  box-shadow: var(--glow-success);
 }
 
 .delete-exercise-btn {
-  flex-shrink: 0;
-  width: 26px;
-  height: 26px;
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  width: 24px;
+  height: 24px;
   padding: 0;
   display: flex;
   align-items: center;
@@ -317,7 +443,7 @@ button:active {
   border: none;
   border-radius: 50%;
   color: var(--danger);
-  font-size: 0.75rem;
+  font-size: 0.7rem;
   line-height: 1;
   opacity: 0;
   transition: opacity 0.2s ease, background-color 0.2s ease;
@@ -345,20 +471,25 @@ button:active {
 }
 
 .workout-sublist {
+  align-self: stretch;
+  text-align: left;
   list-style: none;
   margin: 0;
   padding: 0;
   display: flex;
   flex-direction: column;
-  gap: 0.4rem;
+  gap: 0.2rem;
 }
 
 .tip-text {
-  font-size: 0.85rem;
+  align-self: stretch;
+  text-align: left;
+  font-size: 0.8rem;
   color: var(--text-secondary);
   background: var(--bg);
   border: 1px solid var(--border);
+  border-left: 3px solid var(--success);
   border-radius: var(--radius-sm);
   padding: 0.6rem 0.75rem;
-  margin: 0.5rem 0 0;
+  margin: 0;
 }
