@@ -16,6 +16,21 @@ const workoutErrorEl = document.getElementById('workout-error');
 // tracked here from the session the 'auth-change' event hands us.
 let currentUserId = null;
 
+// Session-scoped only (not persisted across reloads) — Gemini tips aren't
+// stored anywhere server-side, so without this, any fetched tip would vanish
+// the moment renderWorkouts() rebuilds the list (e.g. after logging a new
+// set). Keyed by exercise name so it survives a re-render for that exercise.
+const tipCache = new Map();
+
+function formatFeaturedDate(isoString) {
+  const date = new Date(isoString);
+  return `Last logged ${date.toLocaleDateString(undefined, {
+    month: 'short',
+    day: 'numeric',
+    year: 'numeric',
+  })}`;
+}
+
 // Named distinctly from auth.js's showError/clearError — both files load as
 // plain <script> tags sharing one global scope, so identically-named top-level
 // functions here would silently overwrite auth.js's (last script loaded wins),
@@ -182,6 +197,7 @@ async function deleteExercise(exerciseName, button) {
     return;
   }
 
+  tipCache.delete(exerciseName);
   loadWorkouts();
 }
 
@@ -209,7 +225,12 @@ async function getTips(exerciseName, entries, button, tipEl) {
     });
 
     const data = await res.json();
-    tipEl.textContent = res.ok ? data.tip : data.error || 'Could not get tips right now.';
+    if (res.ok) {
+      tipEl.textContent = data.tip;
+      tipCache.set(exerciseName, data.tip);
+    } else {
+      tipEl.textContent = data.error || 'Could not get tips right now.';
+    }
   } catch (err) {
     tipEl.textContent = 'Could not reach the tips service.';
   }
@@ -222,9 +243,13 @@ async function getTips(exerciseName, entries, button, tipEl) {
 function renderWorkouts(workouts) {
   workoutList.innerHTML = '';
 
+  let index = 0;
   for (const [exerciseName, entries] of groupByExercise(workouts)) {
+    const isFeatured = index === 0;
+    index += 1;
+
     const group = document.createElement('li');
-    group.className = 'exercise-group';
+    group.className = isFeatured ? 'exercise-group featured' : 'exercise-group';
 
     const deleteBtn = document.createElement('button');
     deleteBtn.type = 'button';
@@ -245,6 +270,13 @@ function renderWorkouts(workouts) {
     name.textContent = exerciseName;
 
     title.append(icon, name);
+
+    if (isFeatured) {
+      const dateEl = document.createElement('p');
+      dateEl.className = 'featured-date';
+      dateEl.textContent = formatFeaturedDate(entries[0].created_at);
+      title.append(dateEl);
+    }
 
     const tipsBtn = document.createElement('button');
     tipsBtn.type = 'button';
@@ -268,12 +300,26 @@ function renderWorkouts(workouts) {
     }
 
     const tipText = document.createElement('p');
-    tipText.className = 'tip-text hidden';
+    const cachedTip = tipCache.get(exerciseName);
+    if (cachedTip) {
+      tipText.className = 'tip-text';
+      tipText.textContent = cachedTip;
+    } else {
+      tipText.className = 'tip-text hidden';
+    }
 
     tipsBtn.addEventListener('click', () => getTips(exerciseName, entries, tipsBtn, tipText));
     deleteBtn.addEventListener('click', () => deleteExercise(exerciseName, deleteBtn));
 
-    group.append(title, sublist, tipsBtn, tipText, deleteBtn);
+    if (isFeatured) {
+      const details = document.createElement('div');
+      details.className = 'featured-details';
+      details.append(sublist, tipsBtn, tipText);
+      group.append(title, details, deleteBtn);
+    } else {
+      group.append(title, sublist, tipsBtn, tipText, deleteBtn);
+    }
+
     workoutList.append(group);
   }
 }

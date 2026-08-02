@@ -1,65 +1,86 @@
 :root {
-  --bg: #f6f7f9;
-  --surface: #ffffff;
-  --surface-hover: #eef1f5;
-  --text: #0d0f14;
-  --text-secondary: #5b6472;
-  --border: #e3e6ec;
-  --border-strong: #cbd1db;
+  /* Warm bone/chalk neutrals — every one of these carries the same warm
+     undertone as the accents below, rather than pairing a "flavored" accent
+     onto an unflavored cool-gray UI-kit shell. */
+  --bg: #f2ece1;
+  --surface: #faf6ee;
+  --surface-hover: #efe6d4;
+  --text: #211d18;
+  --text-secondary: #6b6255;
+  --border: #ddd0b8;
+  --border-strong: #c2b190;
 
-  /* Muted-neon accents for light mode: same hues as dark mode, darkened/desaturated
-     enough to hold contrast and read as "bold brand color" rather than glowing. */
-  --primary: #0072e0;
-  --primary-hover: #005bb3;
-  --on-primary: #ffffff;
-  --success: #0f9960;
-  --success-hover: #0c7d4d;
-  --on-success: #ffffff;
+  /* Rust/iron-oxide primary, brass/ochre secondary — darkened enough off
+     their dark-mode values to hold contrast on a light bone background. */
+  --primary: #b5502e;
+  --primary-hover: #963f22;
+  --on-primary: #faf6ee;
+  --success: #8a6a2f;
+  --success-hover: #6f5424;
+  --on-success: #faf6ee;
 
-  --danger: #ef4444;
-  --danger-hover: #dc2626;
+  /* Brick/oxide red — same warm family as --primary, not a generic stop-sign red. */
+  --danger: #a13a2c;
+  --danger-hover: #832d21;
 
-  --shadow: rgba(17, 24, 39, 0.06);
-  --shadow-strong: rgba(17, 24, 39, 0.1);
+  --shadow: rgba(33, 24, 15, 0.08);
+  --shadow-strong: rgba(33, 24, 15, 0.14);
 
   /* No glow in light mode — a bright box-shadow/text-shadow halo doesn't read on
-     a white background, it just looks like a rendering bug. */
+     a light background, it just looks like a rendering bug. */
   --glow-primary: none;
   --glow-primary-strong: none;
   --glow-success: none;
 
-  --radius: 14px;
-  --radius-sm: 10px;
+  /* Small "deburred edge" chamfer, not a mathematically perfect 0 — real
+     cut/welded steel always has a slight radius from deburring, so this
+     reads as fabricated metal rather than a rendering glitch. Applied to
+     every panel, input, and button; the two circular icon buttons below
+     (theme toggle, delete-X) go fully square instead, since a circle was
+     the softest shape left in the UI and squaring it makes the strongest
+     single statement toward the industrial look. */
+  --radius-sm: 3px;
+
+  /* Space Grotesk for headings, JetBrains Mono for numeric workout data
+     (sets/reps/weight/timestamps), Archivo for everything else. Each stack
+     falls back to system fonts if the Google Fonts request is slow/blocked. */
+  --font-heading: 'Space Grotesk', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-mono: 'JetBrains Mono', 'Consolas', 'SFMono-Regular', Menlo, monospace;
+  --font-body: 'Archivo', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
 }
 
 [data-theme='dark'] {
-  --bg: #08090c;
-  --surface: #121319;
-  --surface-hover: #1a1c24;
-  --text: #f2f5f9;
-  --text-secondary: #8b93a5;
-  --border: #21232c;
-  --border-strong: #2f3340;
+  /* Cast-iron/rubber-flooring neutrals — warm near-black, not the cool
+     blue-black of the old neon theme. */
+  --bg: #17140f;
+  --surface: #211c15;
+  --surface-hover: #2b241b;
+  --text: #f1ead9;
+  --text-secondary: #a89a83;
+  --border: #332b1f;
+  --border-strong: #463b2a;
 
-  /* Full-intensity neon: bright cyan-blue primary, neon green secondary. Text
-     drawn on top of these (--on-primary/--on-success) has to go dark, not white,
-     since both accents are lighter than mid-gray. */
-  --primary: #00d4ff;
-  --primary-hover: #4de3ff;
-  --on-primary: #04141c;
-  --success: #39ff8f;
-  --success-hover: #7dffb3;
-  --on-success: #04241a;
+  /* Same rust/brass hues as light mode, brightened for legibility on dark
+     charcoal — read as hot/oxidized metal catching light, not a tech accent. */
+  --primary: #e0672f;
+  --primary-hover: #f0793f;
+  --on-primary: #1a1611;
+  --success: #c99a3f;
+  --success-hover: #dcae52;
+  --on-success: #1a1611;
 
-  --danger: #f87171;
-  --danger-hover: #fca5a5;
+  --danger: #d9503c;
+  --danger-hover: #e6624c;
 
-  --shadow: rgba(0, 0, 0, 0.5);
-  --shadow-strong: rgba(0, 0, 0, 0.65);
+  --shadow: rgba(10, 7, 4, 0.55);
+  --shadow-strong: rgba(10, 7, 4, 0.72);
 
-  --glow-primary: 0 0 10px rgba(0, 212, 255, 0.55), 0 0 26px rgba(0, 212, 255, 0.3);
-  --glow-primary-strong: 0 0 14px rgba(0, 212, 255, 0.75), 0 0 38px rgba(0, 212, 255, 0.4);
-  --glow-success: 0 0 10px rgba(57, 255, 143, 0.5), 0 0 24px rgba(57, 255, 143, 0.28);
+  /* Glow kept but heavily muted from the old neon version (smaller blur,
+     single layer, ~1/3 the opacity) — iron and rust don't emit light, so
+     this reads as a faint warm sheen rather than a glowing sign. */
+  --glow-primary: 0 0 8px rgba(224, 103, 47, 0.25);
+  --glow-primary-strong: 0 0 12px rgba(224, 103, 47, 0.38);
+  --glow-success: 0 0 8px rgba(201, 154, 63, 0.22);
 }
 
 * {
@@ -71,7 +92,7 @@ body {
   min-height: 100vh;
   background: var(--bg);
   color: var(--text);
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  font-family: var(--font-body);
   transition: background-color 0.25s ease, color 0.25s ease;
 }
 
@@ -133,8 +154,9 @@ body {
 }
 
 .app-header h1 {
+  font-family: var(--font-heading);
   font-size: 2.25rem;
-  font-weight: 900;
+  font-weight: 700;
   text-transform: uppercase;
   margin: 0;
   letter-spacing: -0.01em;
@@ -146,7 +168,7 @@ body {
   width: 40px;
   height: 40px;
   padding: 0;
-  border-radius: 50%;
+  border-radius: 0;
   border: 1px solid var(--border);
   background: var(--surface);
   color: var(--text);
@@ -226,16 +248,17 @@ button {
   border: 1px solid transparent;
   padding: 0.75rem 1.25rem;
   cursor: pointer;
+  transform-origin: center bottom;
   transition: background-color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease,
-    transform 0.15s cubic-bezier(0.34, 1.56, 0.64, 1);
+    transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
-button:hover {
-  transform: translateY(-2px);
-}
-
+/* Press = a single rep: quick compression on the way down, then the release
+   transition's overshoot easing (above) rebounds slightly past full size
+   before settling — read as exertion, not a card "lifting" off the page. */
 button:active {
-  transform: scale(0.94) translateY(0);
+  transform: scaleY(0.85) scaleX(1.03);
+  transition: transform 0.09s ease-in;
 }
 
 #login-btn,
@@ -297,8 +320,9 @@ button:active {
 }
 
 #workout-form-card h2 {
+  font-family: var(--font-heading);
   font-size: 1.1rem;
-  font-weight: 800;
+  font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.03em;
   margin: 0 0 1rem;
@@ -349,6 +373,7 @@ button:active {
 }
 
 .workout-item-meta {
+  font-family: var(--font-mono);
   font-size: 0.8rem;
   color: var(--text-secondary);
 }
@@ -393,12 +418,60 @@ button:active {
 }
 
 .exercise-group-name {
+  font-family: var(--font-heading);
   font-size: 0.85rem;
-  font-weight: 800;
+  font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.02em;
   margin: 0;
   overflow-wrap: anywhere;
+}
+
+/* Featured tile: the most-recently-logged exercise (already first in the
+   sorted list) gets a wider, row-oriented layout instead of the uniform
+   centered-column card — the one deliberate break in an otherwise even grid. */
+.exercise-group.featured {
+  grid-column: span 2;
+  flex-direction: row;
+  align-items: stretch;
+  text-align: left;
+  gap: 1.5rem;
+  padding: 1.5rem;
+}
+
+.exercise-group.featured .exercise-group-title {
+  align-items: flex-start;
+  flex-shrink: 0;
+}
+
+.exercise-group.featured .exercise-group-icon {
+  width: 64px;
+  height: 64px;
+}
+
+.exercise-group.featured .exercise-group-icon svg {
+  width: 34px;
+  height: 34px;
+}
+
+.exercise-group.featured .exercise-group-name {
+  font-size: 1.1rem;
+}
+
+.featured-date {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.02em;
+  color: var(--text-secondary);
+  margin: 0.35rem 0 0;
+}
+
+.featured-details {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
 }
 
 .get-tips-btn {
@@ -411,9 +484,31 @@ button:active {
   padding: 0.5rem 0.75rem;
 }
 
+/* Two quick beats (lub-dub) instead of a lift — plays once per hover-in,
+   not looped, so it reads as a brief nod to cardio rather than a distraction. */
+@keyframes heartbeat-pulse {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  15% {
+    transform: scale(1.08);
+  }
+  30% {
+    transform: scale(1);
+  }
+  45% {
+    transform: scale(1.08);
+  }
+  60% {
+    transform: scale(1);
+  }
+}
+
 .get-tips-btn:hover {
   background: color-mix(in srgb, var(--success) 12%, transparent);
   box-shadow: var(--glow-success);
+  animation: heartbeat-pulse 1.1s ease-in-out;
 }
 
 .get-tips-btn:disabled {
@@ -441,16 +536,21 @@ button:active {
   justify-content: center;
   background: transparent;
   border: none;
-  border-radius: 50%;
+  border-radius: 0;
   color: var(--danger);
   font-size: 0.7rem;
   line-height: 1;
   opacity: 0;
-  transition: opacity 0.2s ease, background-color 0.2s ease;
+  transform: scale(0.4);
+  transition: opacity 0.15s ease, transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1),
+    background-color 0.2s ease;
 }
 
+/* Scale-in with overshoot (crossing something off a paper log) instead of a
+   plain opacity fade. */
 .exercise-group:hover .delete-exercise-btn {
   opacity: 1;
+  transform: scale(1);
 }
 
 .delete-exercise-btn:hover {
@@ -516,6 +616,7 @@ button:active {
   /* Delete X: always visible instead of hover-revealed. */
   .delete-exercise-btn {
     opacity: 1;
+    transform: scale(1);
   }
 
   /* No anticipatory "about to tap this" highlight makes sense on touch —
@@ -526,6 +627,7 @@ button:active {
   .get-tips-btn:hover {
     background: transparent;
     box-shadow: none;
+    animation: none;
   }
 
   .delete-exercise-btn:hover {
@@ -576,5 +678,33 @@ button:active {
   #workout-list {
     grid-template-columns: 1fr;
     gap: 0.75rem;
+  }
+
+  /* Not enough width for the row layout — collapse the featured tile back
+     to the same shape as every other box. */
+  .exercise-group.featured {
+    grid-column: span 1;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 1.1rem 1rem 1rem;
+  }
+
+  .exercise-group.featured .exercise-group-title {
+    align-items: center;
+  }
+
+  .exercise-group.featured .exercise-group-icon {
+    width: 40px;
+    height: 40px;
+  }
+
+  .exercise-group.featured .exercise-group-icon svg {
+    width: 22px;
+    height: 22px;
+  }
+
+  .exercise-group.featured .exercise-group-name {
+    font-size: 0.85rem;
   }
 }
