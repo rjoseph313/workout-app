@@ -493,3 +493,88 @@ button:active {
   padding: 0.6rem 0.75rem;
   margin: 0;
 }
+
+/* ============================================================
+   Touch / no-hover devices only. Every rule above (including all
+   :hover rules) is untouched — this block only adds always-visible
+   equivalents for interactions that would otherwise be unreachable
+   or stuck on a device with no hover state. Placed last so it wins
+   any same-specificity ties by source order.
+   ============================================================ */
+@media (hover: none) {
+  /* Nav bar: nothing can hover the trigger strip, so it's just always shown. */
+  .nav-trigger {
+    display: none;
+  }
+
+  .top-nav {
+    transform: none;
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  /* Delete X: always visible instead of hover-revealed. */
+  .delete-exercise-btn {
+    opacity: 1;
+  }
+
+  /* No anticipatory "about to tap this" highlight makes sense on touch —
+     a tap just triggers the action directly. These reset both buttons'
+     own hover tint and the box-level :has() highlight back to the plain
+     state, which also guards against the buttons visually getting stuck
+     in their hover style after a tap (a known iOS/Android quirk). */
+  .get-tips-btn:hover {
+    background: transparent;
+    box-shadow: none;
+  }
+
+  .delete-exercise-btn:hover {
+    background: transparent;
+  }
+
+  .exercise-group:has(.get-tips-btn:hover),
+  .exercise-group:has(.delete-exercise-btn:hover) {
+    background: var(--surface);
+    border-color: var(--border);
+    box-shadow: none;
+  }
+}
+
+/* ============================================================
+   Narrow-viewport sizing. Independent of hover capability — this
+   also applies to a resized desktop browser window, which is
+   correct, since it's purely about available space, not input type.
+   ============================================================ */
+@media (max-width: 640px) {
+  .app {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+
+  .app-header h1 {
+    font-size: 1.6rem;
+  }
+
+  button {
+    font-size: 0.78rem;
+    padding: 0.65rem 1rem;
+  }
+
+  #add-workout-btn {
+    padding: 0.85rem 1.75rem;
+  }
+
+  .workout-form-row {
+    flex-wrap: wrap;
+  }
+
+  .workout-form-row input,
+  .workout-form-row select {
+    flex: 1 1 calc(50% - 0.3rem);
+  }
+
+  #workout-list {
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+  }
+}
