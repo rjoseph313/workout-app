@@ -151,6 +151,33 @@ body {
 
 .nav-spacer {
   flex: 1;
+  display: flex;
+  justify-content: center;
+}
+
+.nav-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.4rem;
+}
+
+.nav-tab {
+  background: transparent;
+  color: var(--text-secondary);
+  border-color: transparent;
+  font-size: 0.7rem;
+  padding: 0.4rem 0.7rem;
+}
+
+.nav-tab:hover {
+  color: var(--text);
+}
+
+.nav-tab.active {
+  color: var(--primary);
+  border-color: var(--border-strong);
+  background: var(--surface-hover);
 }
 
 .app-header h1 {
@@ -319,7 +346,7 @@ button:active {
   display: none;
 }
 
-#workout-form-card h2 {
+.tab-panel h2 {
   font-family: var(--font-heading);
   font-size: 1.1rem;
   font-weight: 700;
@@ -376,6 +403,87 @@ button:active {
   font-family: var(--font-mono);
   font-size: 0.8rem;
   color: var(--text-secondary);
+}
+
+#history-panel {
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.history-filter-row {
+  margin-bottom: 1rem;
+}
+
+#history-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.history-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 0.75rem;
+  padding: 0.7rem 0.9rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+}
+
+.history-item-name {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.01em;
+}
+
+.history-item-meta {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  white-space: nowrap;
+}
+
+#progress-panel {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+#progress-exercise-select {
+  margin-bottom: 1.5rem;
+}
+
+#progress-chart {
+  max-width: 100%;
+}
+
+#profile-panel {
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+.profile-field {
+  margin-bottom: 1.25rem;
+}
+
+.profile-field-label {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-secondary);
+  margin: 0 0 0.3rem;
+}
+
+.profile-field-value {
+  font-size: 0.95rem;
+  margin: 0;
 }
 
 .exercise-group {
@@ -664,6 +772,13 @@ button:active {
 
   #add-workout-btn {
     padding: 0.85rem 1.75rem;
+  }
+
+  /* Four tabs + toggle + logout in one fixed bar needs tighter tabs on
+     narrow screens — they wrap via .nav-tabs' flex-wrap if still too tight. */
+  .nav-tab {
+    font-size: 0.62rem;
+    padding: 0.35rem 0.5rem;
   }
 
   .workout-form-row {

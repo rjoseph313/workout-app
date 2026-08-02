@@ -27,7 +27,14 @@
   <div class="nav-trigger"></div>
   <nav class="top-nav">
     <button type="button" id="theme-toggle" class="theme-toggle" aria-label="Toggle theme"></button>
-    <div class="nav-spacer"></div>
+    <div class="nav-spacer">
+      <div class="nav-tabs hidden" id="nav-tabs">
+        <button type="button" class="nav-tab active" data-tab="log">Log</button>
+        <button type="button" class="nav-tab" data-tab="history">History</button>
+        <button type="button" class="nav-tab" data-tab="progress">Progress</button>
+        <button type="button" class="nav-tab" data-tab="profile">Profile</button>
+      </div>
+    </div>
     <button type="button" id="logout-btn" style="display: none;">Log Out</button>
   </nav>
 
@@ -50,33 +57,82 @@
       <p class="error-text" id="auth-error"></p>
     </div>
 
-    <div class="hidden" id="workout-form-card">
-      <h2>Log a Workout</h2>
-      <div class="workout-form">
-        <input type="text" id="exercise-name" placeholder="Exercise name" />
-        <div class="workout-form-row">
-          <input type="number" id="exercise-sets" placeholder="Sets" min="1" />
-          <input type="number" id="exercise-reps" placeholder="Reps" min="1" />
-          <input type="number" id="exercise-weight" placeholder="Weight" min="0" step="0.5" />
-          <select id="exercise-unit">
-            <option value="lbs">lbs</option>
-            <option value="kg">kg</option>
-          </select>
+    <div class="tab-panel" id="log-panel">
+      <div class="hidden" id="workout-form-card">
+        <h2>Log a Workout</h2>
+        <div class="workout-form">
+          <input type="text" id="exercise-name" placeholder="Exercise name" />
+          <div class="workout-form-row">
+            <input type="number" id="exercise-sets" placeholder="Sets" min="1" />
+            <input type="number" id="exercise-reps" placeholder="Reps" min="1" />
+            <input type="number" id="exercise-weight" placeholder="Weight" min="0" step="0.5" />
+            <select id="exercise-unit">
+              <option value="lbs">lbs</option>
+              <option value="kg">kg</option>
+            </select>
+          </div>
+          <div class="btn-row">
+            <button type="button" id="add-workout-btn">Add Workout</button>
+          </div>
+          <p class="error-text" id="workout-error"></p>
         </div>
-        <div class="btn-row">
-          <button type="button" id="add-workout-btn">Add Workout</button>
-        </div>
-        <p class="error-text" id="workout-error"></p>
       </div>
+
+      <ul id="workout-list" class="hidden"></ul>
     </div>
 
-    <ul id="workout-list" class="hidden"></ul>
+    <div class="tab-panel hidden" id="history-panel">
+      <h2>History</h2>
+      <div class="history-filter-row">
+        <select id="history-filter">
+          <option value="">All exercises</option>
+        </select>
+      </div>
+      <p class="error-text" id="history-error"></p>
+      <ul id="history-list"></ul>
+    </div>
+
+    <div class="tab-panel hidden" id="progress-panel">
+      <h2>Progress</h2>
+      <select id="progress-exercise-select"></select>
+      <p class="error-text" id="progress-error"></p>
+      <canvas id="progress-chart"></canvas>
+      <p class="hidden" id="progress-empty">No weight data logged for this exercise yet.</p>
+    </div>
+
+    <div class="tab-panel hidden" id="profile-panel">
+      <h2>Profile</h2>
+      <div class="profile-field">
+        <p class="profile-field-label">Email</p>
+        <p class="profile-field-value" id="profile-email"></p>
+      </div>
+      <div class="profile-field">
+        <p class="profile-field-label">Member Since</p>
+        <p class="profile-field-value" id="profile-created"></p>
+      </div>
+      <div class="profile-field">
+        <p class="profile-field-label">Total Workouts Logged</p>
+        <p class="profile-field-value" id="profile-count"></p>
+      </div>
+      <div class="profile-field">
+        <label class="profile-field-label" for="profile-unit-pref">Default Weight Unit</label>
+        <select id="profile-unit-pref">
+          <option value="lbs">lbs</option>
+          <option value="kg">kg</option>
+        </select>
+      </div>
+    </div>
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="supabaseClient.js"></script>
   <script src="auth.js"></script>
   <script src="workouts.js"></script>
+  <script src="tabs.js"></script>
+  <script src="history.js"></script>
+  <script src="progress.js"></script>
+  <script src="profile.js"></script>
   <script src="theme.js"></script>
 </body>
 </html>

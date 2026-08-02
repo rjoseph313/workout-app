@@ -49,7 +49,10 @@ function clearForm() {
   exerciseSetsInput.value = '';
   exerciseRepsInput.value = '';
   exerciseWeightInput.value = '';
-  exerciseUnitSelect.value = 'lbs';
+  // getPreferredUnit() is defined in profile.js — safe to call regardless of
+  // script order since this only runs from a click handler, well after every
+  // script has finished loading.
+  exerciseUnitSelect.value = getPreferredUnit();
 }
 
 // Exercise name -> canonical icon key. Several common spellings/phrasings map
